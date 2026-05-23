@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<title>Submit Project</title>
+
+<link rel="stylesheet" href="css/styles.css">
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+</head>
+
+<body>
+
+<div class="page">
+
+<h1 class="logo">🌱 GreenTrace</h1>
+
+<div class="form-card">
+
+<h2>Submit Environmental Project</h2>
+
+<form id="projectForm">
+
+<input type="text" id="name" placeholder="Project Name" required>
+
+<input type="text" id="location" placeholder="Location" required>
+
+<input type="number" id="trees" placeholder="Trees Planted" required>
+
+<label class="upload">
+Upload Project Photo
+<input type="file" id="photo">
+</label>
+
+<h3>Select Project Location</h3>
+
+<div id="map"></div>
+
+<button type="submit" class="primary">Submit Project</button>
+
+</form>
+
+<div id="verification" class="verification hidden">
+
+<div class="satellite"></div>
+
+<p>Running AI & Satellite Verification...</p>
+
+</div>
+
+</div>
+
+<a href="index.html" class="back">← Back</a>
+
+</div>
+
+<!-- SCRIPT MUST BE LAST -->
+<script src="js/api.js"></script>
+
+</body>
+</html>

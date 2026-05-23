@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<title>GreenTrace</title>
+
+<link rel="stylesheet" href="css/styles.css">
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three-globe"></script>
+
+</head>
+
+<body>
+
+<div class="hero">
+
+<div class="hero-text">
+
+<h1>🌱 GreenTrace</h1>
+
+<p>Environmental Credit Verification Platform</p>
+
+<div class="buttons">
+
+<a href="admin.html">
+<button class="secondary">Admin Dashboard</button>
+</a>
+
+<a href="login.html">
+<button class="primary">Login</button>
+</a>
+
+<a href="signup.html">
+<button class="secondary">Create Account</button>
+</a>
+
+</div>
+
+</div>
+
+<div class="hero-image">
+
+<div id="heroGlobe"></div>
+
+</div>
+
+</div>
+
+
+<section class="features">
+
+<h2>Why GreenTrace?</h2>
+
+<div class="feature-grid">
+
+<div class="card">
+<h3>🔍 Verification</h3>
+<p>Multi-layer verification using satellite imagery and AI.</p>
+</div>
+
+<div class="card">
+<h3>🌍 Impact Tracking</h3>
+<p>Track environmental projects and carbon credits transparently.</p>
+</div>
+
+<div class="card">
+<h3>📊 Dashboard</h3>
+<p>Real-time analytics and monitoring of sustainability impact.</p>
+</div>
+
+<div class="card">
+<h3>🌱 Sustainability</h3>
+<p>Helping organizations offset carbon responsibly.</p>
+</div>
+
+</div>
+
+</section>
+
+
+<script>
+
+document.addEventListener("DOMContentLoaded", function(){
+
+const container = document.getElementById("heroGlobe")
+
+if(!container) return
+
+const width = 520
+const height = 520
+
+const scene = new THREE.Scene()
+
+const camera = new THREE.PerspectiveCamera(
+60,
+width / height,
+0.1,
+1000
+)
+
+camera.position.z = 300
+
+
+const renderer = new THREE.WebGLRenderer({
+antialias:true,
+alpha:true
+})
+
+renderer.setSize(width,height)
+renderer.setClearColor(0x000000,0)
+
+container.appendChild(renderer.domElement)
+
+
+const globe = new ThreeGlobe()
+.globeImageUrl("https://unpkg.com/three-globe/example/img/earth-blue-marble.jpg")
+.bumpImageUrl("https://unpkg.com/three-globe/example/img/earth-topology.png")
+scene.add(globe)
+
+
+const ambient = new THREE.AmbientLight(0xffffff,0.6)
+scene.add(ambient)
+
+const sunLight = new THREE.DirectionalLight(0xffffff,1)
+sunLight.position.set(5,3,5)
+scene.add(sunLight)
+
+
+// Carbon trading flows
+globe.arcsData([
+{
+startLat:20,
+startLng:78,
+endLat:37,
+endLng:-122
+},
+{
+startLat:28,
+startLng:77,
+endLat:51,
+endLng:0
+}
+])
+.arcColor(()=>"lime")
+.arcAltitude(0.4)
+.arcStroke(1)
+
+
+
+function animate(){
+
+requestAnimationFrame(animate)
+
+globe.rotation.y += 0.0006
+
+renderer.render(scene,camera)
+
+}
+
+animate()
+
+})
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<title>GreenTrace Dashboard</title>
+
+<link rel="stylesheet" href="css/styles.css">
+
+<!-- MAP -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+<!-- HEATMAP -->
+<script src="https://unpkg.com/leaflet.heat/dist/leaflet-heat.js"></script>
+
+<!-- CHART -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+</head>
+
+<body>
+
+<div class="header">
+
+<h1>🌍 Global Environmental Impact</h1>
+
+<a href="submit.html" class="submit-btn">+ Submit Project</a>
+
+</div>
+<!-- GLOBAL CARBON MARKET -->
+
+<div class="market-counter">
+
+<h2>🌍 Global Carbon Market Value</h2>
+
+<h1 id="marketValue">$2,000,000,000</h1>
+
+<p>Projected to reach $50B by 2030</p>
+
+</div>
+<!-- GLOBAL STATS -->
+
+<div class="stats-grid">
+
+<div class="stat-card">
+<h2 id="projectCount">0</h2>
+<p>Projects</p>
+</div>
+
+<div class="stat-card">
+<h2 id="treeCount">0</h2>
+<p>Trees Planted</p>
+</div>
+
+<div class="stat-card">
+<h2 id="creditCount">0</h2>
+<p>Carbon Credits</p>
+</div>
+
+</div>
+
+
+<!-- ======================= -->
+<!-- COMPANY IMPACT PANEL -->
+<!-- ======================= -->
+
+<h2 class="section-title">🏢 Your Company Impact</h2>
+
+<div class="stats-grid">
+
+<div class="stat-card">
+<h2 id="companyProjects">0</h2>
+<p>Your Projects</p>
+</div>
+
+<div class="stat-card">
+<h2 id="companyTrees">0</h2>
+<p>Your Trees</p>
+</div>
+
+<div class="stat-card">
+<h2 id="companyCredits">0</h2>
+<p>Your Credits</p>
+</div>
+
+</div>
+
+
+
+
+<!-- ======================= -->
+<!-- CARBON CREDIT WALLET -->
+<!-- ======================= -->
+
+<h2 class="section-title">💳 Carbon Credit Wallet</h2>
+
+<div class="wallet-card">
+
+<div class="wallet-row">
+<span>Total Credits Earned</span>
+<strong id="walletEarned">0</strong>
+</div>
+
+<div class="wallet-row">
+<span>Credits Used</span>
+<strong id="walletUsed">0</strong>
+</div>
+
+<div class="wallet-row">
+<span>Available Credits</span>
+<strong id="walletAvailable">0</strong>
+</div>
+
+<button class="primary" onclick="downloadCertificate()">
+Download Carbon Certificate
+</button>
+
+</div>
+
+
+<!-- ======================= -->
+<!-- WALLET HISTORY -->
+<!-- ======================= -->
+
+<div class="wallet-history">
+
+<h3>Recent Activity</h3>
+
+<div id="walletHistory">
+
+<div class="history-item">
+<span class="history-add">+10 Credits</span>
+<span>• Today</span>
+</div>
+
+<div class="history-item">
+<span class="history-remove">-2 Credits</span>
+<span>• Certificate issued</span>
+</div>
+
+</div>
+
+</div>
+<!-- ======================= -->
+<!-- CARBON CREDIT MARKETPLACE -->
+<!-- ======================= -->
+
+<h2 class="section-title">💰 Carbon Credit Marketplace</h2>
+
+<div id="marketplaceListings" class="project-grid">
+
+<div class="project-card">
+Loading marketplace...
+</div>
+
+</div>
+
+
+<!-- ======================= -->
+<!-- IMPACT CHART -->
+<!-- ======================= -->
+
+<h2 class="section-title">📊 Impact Analytics</h2>
+
+<div class="chart-container">
+<canvas id="projectChart"></canvas>
+</div>
+
+<!-- ======================= -->
+<!-- LIVE CARBON MARKET -->
+<!-- ======================= -->
+
+<h2 class="section-title">📈 Live Carbon Market</h2>
+
+<div class="chart-container">
+<canvas id="carbonMarketChart"></canvas>
+</div>
+
+<!-- ======================= -->
+<!-- MAP -->
+<!-- ======================= -->
+
+<h2 class="section-title">🌍 Project Locations</h2>
+
+<div style="text-align:center;margin-bottom:15px;">
+<button id="toggleHeat" class="secondary">
+🌡 Climate Impact Layer
+</button>
+</div>
+
+<div id="map"></div>
+
+
+<!-- ======================= -->
+<!-- PROJECT LIST -->
+<!-- ======================= -->
+
+<h2 class="section-title">🌱 Verified Projects</h2>
+
+<div id="projects" class="project-grid"></div>
+
+
+<!-- ======================= -->
+<!-- LEADERBOARD -->
+<!-- ======================= -->
+
+<h2 class="section-title">🏆 Top Companies</h2>
+
+<div id="leaderboard" class="leaderboard"></div>
+
+
+<!-- FLOATING SUBMIT BUTTON -->
+
+<a href="submit.html" class="floating-submit">🌱</a>
+
+
+<!-- SCRIPT -->
+
+<script src="js/api.js"></script>
+
+</body>
+</html>

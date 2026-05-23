@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<title>Satellite Verification</title>
+
+<link rel="stylesheet" href="css/styles.css">
+
+<style>
+
+.compare-container{
+width:80%;
+margin:60px auto;
+position:relative;
+}
+
+img{
+width:100%;
+border-radius:10px;
+}
+
+.overlay{
+position:absolute;
+top:0;
+left:0;
+width:50%;
+overflow:hidden;
+}
+
+.slider{
+width:100%;
+margin-top:20px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<h1 style="text-align:center;">Satellite Verification</h1>
+
+<div class="compare-container">
+
+<img src="https://eoimages.gsfc.nasa.gov/images/imagerecords/146000/146312/world.topo.bathy.200412.3x5400x2700.jpg">
+
+<div class="overlay" id="overlay">
+
+<img src="https://eoimages.gsfc.nasa.gov/images/imagerecords/146000/146312/world.topo.bathy.200412.3x5400x2700.jpg">
+
+</div>
+
+</div>
+
+<input class="slider" type="range" min="0" max="100" value="50" id="slider">
+
+<script>
+
+const slider = document.getElementById("slider")
+const overlay = document.getElementById("overlay")
+
+slider.addEventListener("input", function(){
+
+overlay.style.width = slider.value + "%"
+
+})
+
+</script>
+
+</body>
+
+</html>

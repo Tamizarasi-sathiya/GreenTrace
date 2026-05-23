@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<title>GreenTrace Admin Panel</title>
+
+<link rel="stylesheet" href="css/styles.css">
+
+<!-- Leaflet -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+<!-- Satellite comparison -->
+<link rel="stylesheet"
+href="https://unpkg.com/leaflet-side-by-side/leaflet-side-by-side.css"/>
+
+<script src="https://unpkg.com/leaflet-side-by-side/leaflet-side-by-side.js"></script>
+
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<!-- THREE JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+<!-- Orbit Controls -->
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+
+<!-- Three Globe -->
+<script src="https://cdn.jsdelivr.net/npm/three-globe"></script>
+
+<style>
+
+/* PAGE */
+
+body{
+font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display",sans-serif;
+background:linear-gradient(180deg,#f8f9fb,#eef1f5);
+margin:0;
+padding-bottom:50px;
+}
+
+/* HEADER */
+
+.header{
+text-align:center;
+margin-top:20px;
+}
+
+/* STATS */
+
+.stats-grid{
+display:flex;
+justify-content:center;
+gap:30px;
+margin-top:30px;
+flex-wrap:wrap;
+}
+
+.stat-card{
+background:white;
+padding:20px 30px;
+border-radius:12px;
+box-shadow:0 10px 25px rgba(0,0,0,0.08);
+text-align:center;
+min-width:180px;
+}
+
+.stat-card h2{
+margin:0;
+font-size:30px;
+color:#34c759;
+}
+
+/* IMPACT BAR */
+
+.impact-bar{
+text-align:center;
+margin-top:25px;
+font-size:18px;
+font-weight:600;
+color:#2c7a3f;
+}
+
+/* TABLE */
+
+table{
+border-collapse:collapse;
+margin-top:30px;
+}
+
+th, td{
+padding:12px;
+text-align:center;
+border-bottom:1px solid #eee;
+}
+
+button{
+padding:8px 14px;
+border:none;
+border-radius:8px;
+cursor:pointer;
+margin:2px;
+background:#34c759;
+color:white;
+}
+
+button.secondary{
+background:#777;
+}
+
+button:hover{
+opacity:0.9;
+}
+
+/* MODAL */
+
+.modal{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.6);
+display:flex;
+justify-content:center;
+align-items:center;
+z-index:999;
+}
+
+.modal-content{
+background:white;
+padding:30px;
+width:720px;
+border-radius:15px;
+max-height:90vh;
+overflow:auto;
+}
+
+.hidden{
+display:none;
+}
+
+/* ANALYSIS GRID */
+
+.analysis-grid{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:10px;
+margin-top:10px;
+}
+
+.analysis-card{
+background:#f5f7fa;
+padding:10px;
+border-radius:8px;
+font-size:14px;
+}
+
+/* GLOBE */
+
+#globeContainer{
+width:100%;
+max-width:1100px;
+height:520px;
+margin:auto;
+margin-top:30px;
+background:#000;
+border-radius:20px;
+overflow:hidden;
+box-shadow:0 40px 80px rgba(0,0,0,0.25);
+position:relative;
+}
+
+/* GLOBE LOADER */
+
+#globeLoader{
+position:absolute;
+top:50%;
+left:50%;
+transform:translate(-50%,-50%);
+color:white;
+font-size:18px;
+font-weight:500;
+}
+
+/* LEGEND */
+
+.globe-legend{
+width:1000px;
+margin:auto;
+margin-top:10px;
+display:flex;
+justify-content:space-between;
+font-size:14px;
+}
+
+.legend-item{
+display:flex;
+align-items:center;
+gap:8px;
+}
+
+.legend-color{
+width:14px;
+height:14px;
+border-radius:4px;
+}
+
+/* MARKETPLACE */
+
+.marketplace{
+width:90%;
+margin:auto;
+margin-top:40px;
+}
+
+.marketplace-card{
+background:white;
+padding:20px;
+border-radius:12px;
+box-shadow:0 10px 25px rgba(0,0,0,0.08);
+margin-top:10px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+}
+
+/* FRAUD ALERT */
+
+.fraud-alert{
+width:90%;
+margin:auto;
+margin-top:20px;
+background:#fff5f5;
+padding:15px;
+border-radius:10px;
+color:#c53030;
+font-weight:500;
+box-shadow:0 6px 15px rgba(0,0,0,0.05);
+}
+
+/* HEADINGS */
+
+.section-title{
+text-align:center;
+margin-top:40px;
+}
+
+/* PHOTO */
+
+#projectPhoto{
+width:100%;
+border-radius:10px;
+margin-top:10px;
+object-fit:cover;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="header">
+
+<h1>
+🌱 GreenTrace Climate Verification Panel
+</h1>
+
+<p style="color:#666">
+Real-time satellite verification of reforestation projects using NDVI vegetation intelligence
+</p>
+
+</div>
+
+<!-- GLOBAL IMPACT -->
+
+<div class="impact-bar">
+🌍 Global CO₂ Offset Verified by GreenTrace
+<span id="impactCO2">0</span> kg
+</div>
+
+<!-- ADMIN STATS -->
+
+<div class="stats-grid">
+
+<div class="stat-card">
+<h2 id="pendingCount">0</h2>
+<p>Pending Projects</p>
+</div>
+
+<div class="stat-card">
+<h2 id="verifiedCount">0</h2>
+<p>Verified Projects</p>
+</div>
+
+<div class="stat-card">
+<h2 id="totalCredits">0</h2>
+<p>Total Credits Issued</p>
+</div>
+
+<div class="stat-card">
+<h2 id="treeCount">0</h2>
+<p>Total Trees Tracked</p>
+</div>
+
+</div>
+
+<!-- FRAUD ALERT PANEL -->
+
+<div id="fraudAlert" class="fraud-alert hidden">
+⚠ Suspicious project activity detected
+</div>
+
+<!-- GLOBAL CLIMATE GLOBE -->
+
+<h2 class="section-title">
+🌍 Global Climate Impact Globe
+</h2>
+
+<div id="globeContainer">
+
+<div id="globeLoader">
+Loading Climate Globe...
+</div>
+
+</div>
+
+<!-- Globe Legend -->
+
+<div class="globe-legend">
+
+<div class="legend-item">
+<div class="legend-color" style="background:#00ff88"></div>
+Verified Project
+</div>
+
+<div class="legend-item">
+<div class="legend-color" style="background:#ffcc00"></div>
+Pending Project
+</div>
+
+<div class="legend-item">
+<div class="legend-color" style="background:#22ff22"></div>
+NDVI Vegetation Heat
+</div>
+
+<div class="legend-item">
+<div class="legend-color" style="background:#00e1ff"></div>
+Carbon Flow
+</div>
+
+</div>
+
+<!-- PROJECT TABLE -->
+
+<table id="projectsTable" style="width:90%;margin:auto">
+
+<tr>
+<th>Project</th>
+<th>Location</th>
+<th>Claimed Trees</th>
+<th>Detected Trees (AI)</th>
+<th>NDVI</th>
+<th>Status</th>
+<th>Fraud Risk</th>
+<th>Action</th>
+</tr>
+
+</table>
+
+<!-- CARBON MARKETPLACE -->
+
+<h2 class="section-title">
+💰 Carbon Credit Marketplace
+</h2>
+
+<div class="marketplace" id="marketplace">
+
+<div class="marketplace-card">
+<span>No credits listed yet</span>
+</div>
+
+</div>
+
+<!-- PROJECT MODAL -->
+
+<div id="projectModal" class="modal hidden">
+
+<div class="modal-content">
+
+<h2 id="modalTitle"></h2>
+
+
+<p id="modalLocation"></p>
+<p id="modalTrees"></p>
+<p id="modalCredits"></p>
+<p id="modalCO2"></p>
+<p id="modalNDVI"></p>
+
+<p id="modalStatus"></p>
+
+
+
+<h3>Vegetation Intelligence</h3>
+
+<div class="analysis-grid">
+
+<div class="analysis-card" id="modalHealth"></div>
+<div class="analysis-card" id="modalDensity"></div>
+
+<div class="analysis-card" id="modalCanopy"></div>
+
+<div class="analysis-card">
+Satellite Verification Confidence
+</div>
+
+<div class="analysis-card" id="modalFraud"></div>
+<div class="analysis-card" id="modalImpact"></div>
+
+</div>
+
+<h3>NDVI Vegetation Timeline</h3>
+
+<canvas id="ndviChart" style="height:200px"></canvas>
+
+<h3>Vegetation Growth Comparison</h3>
+
+<div id="compareMap"
+style="height:350px;border-radius:12px;margin-top:10px"></div>
+<p id="modalLocation"></p>
+<h3>Project Photo Evidence</h3>
+
+<img id="projectPhoto" src="">
+
+<br><br>
+
+<button onclick="closeModal()" class="secondary">
+Close
+</button>
+
+</div>
+
+</div>
+<!-- SATELLITE TIMELINE MODAL -->
+
+<div id="timelineModal" class="modal hidden">
+
+<div class="modal-content">
+
+<h2 id="timelineTitle">Satellite Timeline</h2>
+
+<div style="display:flex;gap:20px;justify-content:center;margin-top:20px">
+
+<div style="text-align:center">
+<p>Day 1 – Satellite Evidence</p>
+<img id="timelineImg1" width="220">
+</div>
+
+<div style="text-align:center">
+<p>Day 15 – Vegetation Index</p>
+<img id="timelineImg2" width="220">
+</div>
+
+<div style="text-align:center">
+<p>Day 30 – Forest Growth Heatmap</p>
+<img id="timelineImg3" width="220">
+</div>
+
+</div>
+
+<h3 style="margin-top:25px">Vegetation Growth</h3>
+
+<canvas id="timelineChart" style="height:200px"></canvas>
+
+<br>
+
+<button onclick="closeTimeline()" class="secondary">
+Close
+</button>
+
+</div>
+
+</div>
+<!-- SELL CREDITS MODAL -->
+
+<div id="sellModal" class="modal hidden">
+
+<div class="modal-content">
+
+<h2>Sell Carbon Credits</h2>
+
+<p id="sellProject"></p>
+
+<label>Credits to Sell</label>
+<input id="sellCredits" type="number" style="width:100%;padding:8px;margin-bottom:10px">
+
+<label>Price per Credit ($)</label>
+<input id="sellPrice" type="number" style="width:100%;padding:8px;margin-bottom:20px">
+
+<button onclick="confirmSale()">Confirm Sale</button>
+
+<button onclick="closeSell()" class="secondary">Cancel</button>
+
+</div>
+
+</div>
+
+<script src="js/admin.js"></script>
+</body>
+</html>
